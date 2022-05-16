@@ -16,7 +16,7 @@ var shuffleSequence = seq("consent", "demo", "IDentry", "intro",
 newTrial("IDentry",
     newVar("partID").global()
     ,
-    newText("instr", "Please enter your Prolific ID:").print()
+    newText("instr", "请输入您的Prolific ID:").print()
     ,
     newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
     ,
@@ -127,7 +127,7 @@ var items = [
 
 	["sendresults", "__SendResults__", { }],
 
-	["sep", "MazeSeparator", {normalMessage: "Correct! Press any key to continue", errorMessage: "Incorrect! Press any key to continue."}],
+	["sep", "MazeSeparator", {normalMessage: "正确! 请按任意键继续", errorMessage: "错误！请按任意键继续"}],
 
 ["consent", "Form", { html: { include: "consent.html" } } ],
 

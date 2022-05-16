@@ -80,7 +80,7 @@ jqueryWidget: {
         var x = this.utils.getValueFromPreviousElement("counter");
         if (x) this.wordsSoFar=x;
         else this.wordsSoFar=0;
-        this.counter.html("Words so far: "+this.wordsSoFar);
+        this.counter.html("目前已读字数: "+this.wordsSoFar);
         this.mainDiv.css('text-align', 'center');
         this.arrow.append(this.larrow);
         this.arrow.append(this.rarrow);
@@ -153,7 +153,7 @@ jqueryWidget: {
             this.rightWord.html((this.order[this.currentWord]===0) ?
                 this.alts[this.currentWord]:this.words[this.currentWord]);
             this.wordsSoFar++;
-            this.counter.html("Words so far: "+this.wordsSoFar);
+            this.counter.html("目前已读字数: "+this.wordsSoFar);
         }
     },
 
