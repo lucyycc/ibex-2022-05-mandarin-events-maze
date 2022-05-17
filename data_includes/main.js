@@ -16,7 +16,7 @@ var shuffleSequence = seq("consent", "demo", "IDentry", "intro",
 newTrial("IDentry",
     newVar("partID").global()
     ,
-    newText("instr", "请输入您的Prolific ID:").print()
+    newText("instr", "请输入10位数字代码，此匿名代码将作为您的资料代码:").print()
     ,
     newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
     ,
