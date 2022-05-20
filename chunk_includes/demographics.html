@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Biographical Information</title>
+</head>
+<body>
+<div id="top"></div>
+<div style="font-family:helvetica;">
+
+    <br><br>
+
+    <table style="color:black; width: 100%">
+ <!--   	<colgroup>
+       <col span="1" style="width: 95%;">
+       <col span="1" style="width: 5%;">
+   </colgroup>
+-->
+        <tbody>
+            <tr>
+                <td>Age:</td>
+                <td><input type = "number" name="age" type="text" STYLE="background-color: white;height:30px;" size="38" class="obligatory" maxlength="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label class="error" for="age"></label></td>
+            </tr>
+            <tr>
+                <td>Current COUNTRY of residence:</td>
+                <td><input name="country" type="text" STYLE="background-color: white; height:30px;" size="38" class="obligatory"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label class="error" for="age"></label></td>
+            </tr>
+            <tr>
+                <td>Current CITY of residence:</td>
+                <td><input name="city" type="text" STYLE="background-color: white; height:30px;" size="38" class="obligatory"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label class="error" for="born"></label></td>
+            </tr>
+            <tr>
+                <td>Highest level of education completed:</td>
+                <td><input name="edu" type="radio" value="prehigh"     class="obligatory" id="prehigh"><label for="prehigh">    Less than High School</label></td>
+                <td><input name="edu" type="radio" value="highschool" class ="obligatory" id="highschool"><label for="highschool" >High School</label></td>
+                </tr><tr>
+                    <td></td>
+                <td><input name="edu" type="radio" value="somecollege" class ="obligatory" id="somecollege"><label for="somecollege">Some college (including associate's degree)</label></td>
+                <td><input name="edu" type="radio" value="college"    class ="obligatory" id="college"    ><label for="college"    >College (bachelor's degree)</label></td>
+            </tr><tr>
+                <td></td>
+                <td><input name="edu" type="radio" value="somegrad"   class ="obligatory" id="somegrad"   ><label for="somegrad"   >Some graduate school</label></td>
+                <td><input name="edu" type="radio" value="masters"    class ="obligatory" id="masters"    ><label for="masters"    >Masters</label></td>
+            </tr><tr>
+                <td></td>
+                <td><input name="edu" type="radio" value="terminal"   class ="obligatory" id="terminal"   ><label for="terminal"   >PhD/MD/JD or other doctoral degree</label></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label class="error" for="edu"></label></td>
+            </tr>
+         </tbody></table>
+</div>
+<br><br>
