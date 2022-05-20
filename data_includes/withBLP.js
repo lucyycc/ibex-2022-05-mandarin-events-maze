@@ -10,8 +10,7 @@ var shuffleSequence = seq("consent", "IDentry", "intro",
  // trials named _dummy_ will be excluded by following:
                         sepWith("sep", rshuffle(startsWith("break"), startsWith("hit"), startsWith("filler"))),
  // bilingual language profile survey
-                        "intro", 
-                        "IDentry", 
+                        "blpintro", 
                         "bio",
                         "history_text",
                         "history", 
@@ -225,24 +224,12 @@ var items = [
 /// Instructions:
 
 // Subject info
-newTrial("intro",
+newTrial("blpintro",
     newText("InstructionText", "We would like to ask you to help us by answering the following questions concerning your language history, use, attitudes, and proficiency. This survey was created with support from the Center for Open Educational Resources and Language Learning at the University of Texas at Austin to better understand the profiles of bilingual speakers in diverse settings with diverse backgrounds. The survey consists of 19 questions and will take less than 10 minutes to complete. This is not a test, so there are no right or wrong answers. Please answer every question and give your answers sincerely. Thank you very much for your help.")
         .print()
     ,
     newButton("Next").print().wait()
 )
-newTrial("IDentry",
-    newVar("partID").global()
-    ,
-    newText("instr", "Please enter your Prolific ID:").print()
-    ,
-    newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
-    ,
-    newButton("Next").print().wait( 
-        getVar("partID").set( v=>$("#partID").val() ).testNot.is('')
-    )
-)
-.log("partID", getVar("partID"))
 
 // -------------------------------------------------------------------
 // Biographical Information
