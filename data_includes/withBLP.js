@@ -30,7 +30,7 @@ newTrial("IDentry",
     ,
     newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
     ,
-    newButton("Next").print().wait( 
+    newButton("点此继续").print().wait( 
         getVar("partID").set( v=>$("#partID").val() ).testNot.is('')
     )
 )
@@ -167,7 +167,7 @@ var items = [
 
 ["startpractice", Message, {consentRequired: false,
 	html: ["div",
-		   ["p", "您可以先开始做三组练习"]
+		   ["p", "您可以先做三组练习"]
 		  ]}],
 
 //
