@@ -1,7 +1,7 @@
 PennController.ResetPrefix(null); // Shorten command names (keep this line here))
 PennController.DebugOff();
 
-var shuffleSequence = seq("consent", "demo", "IDentry", "intro",
+var shuffleSequence = seq("consent", "IDentry", "intro",
                         "startpractice",
                         sepWith("sep", seq("practice")),
  // putting counter after practice so it won't increment all at the same time when participants show up, as that messes up lists
