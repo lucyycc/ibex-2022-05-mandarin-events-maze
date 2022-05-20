@@ -393,7 +393,7 @@ newTrial("intro_use",
     newButton("Next").print().wait()
 )
 
-    Template(GetTable( "stimuli.csv")
+    Template(GetTable( "blp.csv")
         .filter( row => row.category == "use")  // filter where row.category value equals 'history'
         , row => 
         newTrial("use",
@@ -552,7 +552,7 @@ newTrial("intro_profic_attit",
     newButton("Next").print().wait()
 )
 
-Template(GetTable( "stimuli.csv")
+Template(GetTable( "blp.csv")
     .filter( row => row.category == "proficiency" || row.category == "attitudes")  // filter where row.category value equals 'history'
     , row => 
     newTrial("profic_attit",
