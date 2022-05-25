@@ -87,7 +87,7 @@ function modifyRunningOrder(ro) {
   for (var i in ro) {
     var item = ro[i];
     // fill in the relevant experimental condition names on the next line
-    if (item[0].type.startsWith("psych")|| item[0].type.startsWith("mklo") || item[0].type.startsWith("gp")) {
+    if (item[0].type.startsWith("break")|| item[0].type.startsWith("hit") || item[0].type.startsWith("filler")) {
         item_count++;
         new_ro.push(item);
       // first number after item count is how many items between breaks. second is total-items - 1
