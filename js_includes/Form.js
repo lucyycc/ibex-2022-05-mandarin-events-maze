@@ -12,20 +12,20 @@ jqueryWidget: {
         this.html = dget(this.options, "html");
         this.continueOnReturn = dget(this.options, "continueOnReturn", false);
         this.continueMessage = dget(this.options, "continueMessage", "点此继续");
-        this.checkedValue = dget(this.options, "checkedValue", "yes");
-        this.uncheckedValue = dget(this.options, "uncheckedValue", "no");
+        this.checkedValue = dget(this.options, "checkedValue", "是的");
+        this.uncheckedValue = dget(this.options, "uncheckedValue", "不是");
         this.validators = dget(this.options, "validators", { });
-        this.errorCSSClass = dget(this.options, "errorCSSClass", "error");
+        this.errorCSSClass = dget(this.options, "errorCSSClass", "错误");
         this.saveReactionTime = dget(this.options, "saveReactionTime", false);
         this.obligatoryErrorGenerator =
             dget(this.options, "obligatoryErrorGenerator",
-                 function (field) { return "The \u2018" + field + "\u2019 field is obligatory."; });
+                 function (field) { return "\u2018" + field + "\u2019 这是必填的"; });
         this.obligatoryCheckboxErrorGenerator =
             dget(this.options, "obligatoryCheckboxErrorGenerator",
-                 function (field) { return "You must check the " + field + " checkbox to continue."; });
+                 function (field) { return "您需要勾选" + field + "才能继续"; });
         this.obligatoryRadioErrorGenerator =
             dget(this.options, "obligatoryRadioErrorGenerator",
-                 function (field) { return "You must select an option for \u2018" + field + "\u2019."; });
+                 function (field) { return "您需要选出一个\u2018" + field + "\u2019."; });
 
         var t = this;
 
