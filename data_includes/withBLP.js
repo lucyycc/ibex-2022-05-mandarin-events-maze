@@ -100,7 +100,7 @@ function modifyRunningOrder(ro) {
       // first number is the total number of blocks. second number is number of items per block
                 text="End of block. "+(6-(Math.floor(item_count/15)))+" blocks left.";
             }ro[i].push(new DynamicElement("Message", 
-                              { html: "<p>30-second break - stretch and look away from the screen briefly if needed.</p>", transfer: 30000 }));
+                              { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
         }
       } else {
       new_ro.push(item);
@@ -238,12 +238,12 @@ newTrial("bio",
     newHtml("bio_html", "demographics.html")
         .center()
         .log()
-        .checkboxWarning("You must give your consent to continue.")
-        .radioWarning("You must choose an option.")
-        .inputWarning("This field must be filled in.")
+        .checkboxWarning("您同意后才能继续。")
+        .radioWarning("您需要选择一个选项。")
+        .inputWarning("这个部分需要填写。")
         .print()
     ,
-    newButton("continue", "Continue")
+    newButton("continue", "继续")
         .css("font-size","medium")
         .center()
         .print()
@@ -359,7 +359,7 @@ newTrial("intro_history",
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue")
+        newButton("continue", "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
@@ -518,7 +518,7 @@ newTrial("intro_use",
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue")
+        newButton("continue", , "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
@@ -616,7 +616,7 @@ Template(GetTable( "blp.csv")
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue")
+        newButton("continue", "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
