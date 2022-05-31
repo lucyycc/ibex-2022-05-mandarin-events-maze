@@ -1,7 +1,7 @@
 PennController.ResetPrefix(null); // Shorten command names (keep this line here))
 PennController.DebugOff();
 
-var shuffleSequence = seq("consent", "IDentry", "intro",
+var shuffleSequence = seq("consent", "IDentry", "intro", "tech",
                         "startpractice",
                         sepWith("sep", seq("practice")),
  // putting counter after practice so it won't increment all at the same time when participants show up, as that messes up lists
@@ -153,6 +153,8 @@ var items = [
 } ],
 
 ["intro", "Form", { html: { include: "intro1.html" } } ],
+
+["tech", "Form", { html: { include: "tech.html" } } ],
 
 // ["begin", "PennController",
 //         newTrial(
