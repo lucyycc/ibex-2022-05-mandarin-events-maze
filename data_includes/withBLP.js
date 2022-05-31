@@ -470,7 +470,7 @@ newTrial("intro_use",
         .print()
     ,
 // other languages
-        newText("langoth", "其他語言")  // adds padding between lines
+        newText("langoth", "其他语言")  // adds padding between lines
             .css('font-size','1em')
             .print()
         ,
