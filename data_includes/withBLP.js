@@ -1,24 +1,27 @@
 PennController.ResetPrefix(null); // Shorten command names (keep this line here))
 PennController.DebugOff();
 
-var shuffleSequence = seq("consent", "IDentry", "intro",
+var shuffleSequence = seq("consent", "IDentry", "intro", "tech",
                         "startpractice",
                         sepWith("sep", seq("practice")),
  // putting counter after practice so it won't increment all at the same time when participants show up, as that messes up lists
                         "setcounter",
                         "starter",
  // trials named _dummy_ will be excluded by following:
-                        sepWith("sep", rshuffle(startsWith("break"), startsWith("hit"), startsWith("filler"))),
+            //            sepWith("sep", rshuffle(startsWith("break"), startsWith("hit"), startsWith("filler"))),
+                        followEachWith("sep",randomize(anyOf(startsWith("break"),startsWith("hit"), startsWith("filler")))),
  // bilingual language profile survey
                         "blpintro", 
                         "bio",
-                        "history_text",
+                        "intro_history",
                         "history", 
-                        "use_text",
+                        "intro_use",
                         "use", 
-                        "profic_attit_text",
-                        "profic_attit", 
-                        "closing",
+                        "intro_profic",
+                        "profic", 
+                        "intro_attit",
+                        "attit", 
+ //                       "closing",
  						"sendresults",
                         "completion"
                 );
@@ -30,7 +33,7 @@ newTrial("IDentry",
     ,
     newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
     ,
-    newButton("Next").print().wait( 
+    newButton("clickcontinue", "点此继续").print().wait( 
         getVar("partID").set( v=>$("#partID").val() ).testNot.is('')
     )
 )
@@ -53,61 +56,49 @@ var defaults = [
    // "Maze", {redo: true}, //uncomment to try "redo" mode
 ];
 
-// The following example inserts a "pause" Message at every nth item (where i % n)
-// The % operator returns the remainder of two numbers, so will be 0 when a multiple of n
-
-//function modifyRunningOrder(ro) {
-// for (var i = 1; i < ro.length; ++i) {
-//     if (i % 50 == 0) {
-//              // Passing 'true' as the third argument casues the results from this controller
-//            // to be omitted from the results file. (Though in fact, the Message controller
-//          // does not add any results in any case.)
-//           ro[i].push(new DynamicElement(
-//                 "Message",
-//               //    { html: "<p>Pause</p>", transfer: 1000 },
-//                     { html: "<p>You can take a short break (1 minute or less) here if needed. Press any key to continue.</p>", transfer: "keypress" },
-//  						true
-//               ));
-//           }
-//        }
-//       return ro;
-//    }
-
-// following is from the A-maze site to make breaks every 15 maze sentences
+// following is from the A-maze site to make breaks every 15(ish) maze sentences
 // you have to set the write number of total items and number of blocks to start with, and the right condition names, etc.
 // calculate the following numbers to fill in the values below (not including practice trials-
-// total maze sentences a participant will be presented: 85
-// sentences per block: 15
-// number of blocks: 6 (last incomplete)
+// for Mandarin hit/break study:
+// total maze sentences a participant will be presented: 64 (25 experiment, 39 filler)
+// sentences per block: 16
+// number of blocks: 4
 
 function modifyRunningOrder(ro) {
 
-  var new_ro = [];
-  item_count=0;
-  for (var i in ro) {
-    var item = ro[i];
-    // fill in the relevant experimental condition names on the next line
-    if (item[0].type.startsWith("psych")|| item[0].type.startsWith("mklo") || item[0].type.startsWith("gp")) {
-        item_count++;
-        new_ro.push(item);
-      // first number after item count is how many items between breaks. second is total-items - 1
-        if (item_count%15===0 & item_count<84){
-       // value here should be total_items - items_per_block (to trigger message that last block is coming up)
-            if (item_count===75){
-                text="End of block. Only 1 block left!";
+    var new_ro = [];
+    item_count=0;
+    for (var i in ro) {
+      var item = ro[i];
+      // fill in the relevant stimuli condition names on the next line including fillers (all that should be counted for break purposes)
+      if (item[0].type.startsWith("break")|| item[0].type.startsWith("hit") || item[0].type.startsWith("filler")) {
+          item_count++;
+          new_ro.push(item);
+        // number after percent (remainder) after item_count is how many items between breaks. last number is total-items - 1
+          if (item_count%16===0 & item_count<63){
+         // value for item_count=== should be total_items - items_per_block (to trigger message that last block is coming up)
+         // text says "only 1 set of sentences left"
+              if (item_count===48){
+                    ro[i].push(new DynamicElement("Message", 
+                        { html: "<p>只剩下一组句子了</p>", transfer: 3000 }));
+                } else {
+                // first number is the total number of blocks. second number is number of items per block
+                // message says "end of block. n blocks left."
+                    ro[i].push(new DynamicElement("Message", 
+                        { html: "<p>本组句子结束，还剩"+(4-(Math.floor(item_count/16)))+" 组句子</p>", transfer: 3000 }));
                 }
-            else {
-      // first number is the total number of blocks. second number is number of items per block
-                text="End of block. "+(6-(Math.floor(item_count/15)))+" blocks left.";
-            }ro[i].push(new DynamicElement("Message", 
-                              { html: "<p>30-second break - stretch and look away from the screen briefly if needed.</p>", transfer: 30000 }));
+                // next message is added for all breaks after the count message
+                ro[i].push(new DynamicElement("Message", 
+                    { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
+          }
+        } else {
+    // if it's not an experimental trial, such as separator or other item, just show the item
+             new_ro.push(item);
         }
-      } else {
-      new_ro.push(item);
-      }
+    }
+    return new_ro;
   }
-  return new_ro;
-}
+  
 
 // template items will be pushed into native items = [] with fake PC trial _dummy_ output
 
@@ -141,14 +132,9 @@ var items = [
 
 ["consent", "Form", { html: { include: "consent.html" } } ],
 
-["demo", "Form", {
-	html: { include: "demo.html" },
-	validators: {
-		age: function (s) { if (s.match(/^\d+$/)) return true; else return "Bad value for \u2018age\u2019"; }
-	}
-} ],
-
 ["intro", "Form", { html: { include: "intro1.html" } } ],
+
+["tech", "Form", { html: { include: "tech.html" } } ],
 
 // ["begin", "PennController",
 //         newTrial(
@@ -167,7 +153,7 @@ var items = [
 
 ["startpractice", Message, {consentRequired: false,
 	html: ["div",
-		   ["p", "您可以先开始做三组练习"]
+		   ["p", "您可以先做三组练习"]
 		  ]}],
 
 //
@@ -178,22 +164,12 @@ var items = [
 [["practice", 802], "Maze", {s:"爸爸 边看 电视 边讲 电话", a:"x-x-x 气孔 避免 腐朽 抓住"}],
 [["practice", 803], "Maze", {s:"运动员 在健身房 做了 重量 训练", a:"x-x-x 莎士比亚 螳螂 愤怒 爸爸"}],
 
-
-//		["instructions2", "Message", {html:'End of sample Maze experiment.'}],
-//	["intro-gram", "Message", {html: "<p>For this experiment, please place your left index finger on the 'e' key and your right index finger on the 'i' key.</p><p> You will read sentences word by word. On each screen you will see two options: one will be the next word in the sentence, and one will not. Select the word that continues the sentence by pressing 'e' (left-hand) for the word on the left or pressing 'i' (right-hand) for the word on the right.</p><p>Select the best word as quickly as you can, but without making too many errors.</p>"}],
-//	["intro-practice", "Message", {html: "The following items are for practice." }],
-//	["end-practice", "Message", {html: "End of practice. The experiment will begin next."}],
-//	["done", "Message", {html: "All done!"}],
-
    // message that the experiment is beginning
-
 
    ["starter", Message, {consentRequired: false,
 	html: ["div",
 		   ["p", "点此开始主实验"]
 		  ]}],
-
-
 
 // experimental stimuli:
 
@@ -220,12 +196,14 @@ var items = [
 // leave this bracket - it closes the items section
 ];
 
-//// 
+// -------------------------------------------------------------------
+
+//// BLP Section 
 /// Instructions:
 
 // Subject info
 newTrial("blpintro",
-    newText("InstructionText", "We would like to ask you to help us by answering the following questions concerning your language history, use, attitudes, and proficiency. This survey was created with support from the Center for Open Educational Resources and Language Learning at the University of Texas at Austin to better understand the profiles of bilingual speakers in diverse settings with diverse backgrounds. The survey consists of 19 questions and will take less than 10 minutes to complete. This is not a test, so there are no right or wrong answers. Please answer every question and give your answers sincerely. Thank you very much for your help.")
+    newText("InstructionText", "我们想请您回答一些关于您语言使用的问题，以下的问题包含您的语言使用历史，使用状况，语言态度以及语言程度。此问卷是由德州大学奥斯丁分校的开放教育资源及语言学习中心所研发，目的在于帮助我们了解双语者在多元的环境跟背景之下的个人资料。此份问卷有19个问题，作答时间约为10分钟。此份问卷不是能力测验，所以并没有标准答案，请您根据您本身的状况据实回答即可，感谢您的回答。")
         .print()
     ,
     newButton("Next").print().wait()
@@ -238,12 +216,12 @@ newTrial("bio",
     newHtml("bio_html", "demographics.html")
         .center()
         .log()
-        .checkboxWarning("You must give your consent to continue.")
-        .radioWarning("You must choose an option.")
-        .inputWarning("This field must be filled in.")
+        .checkboxWarning("您同意后才能继续。")
+        .radioWarning("您需要选择一个选项。")
+        .inputWarning("这个部分需要填写。")
         .print()
     ,
-    newButton("continue", "Continue")
+    newButton("continue", "继续")
         .css("font-size","medium")
         .center()
         .print()
@@ -261,7 +239,7 @@ newTrial("bio",
 // -------------------------------------------------------------------
 // Language History
 newTrial("intro_history",
-    newText("history_text", "<b>Language history:</b> In this section, we would like you to answer some factual questions about your language history by placing a check in the appropriate box.")
+    newText("history_text", "<b>语言使用历史:</b> 这个部份的问题，我们想请您回答一些关于您本身语言使用历史的问题，请在相符的框框中勾选您的答案")
         .print()
     ,
     newButton("Next").print().wait()
@@ -359,7 +337,7 @@ newTrial("intro_history",
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue")
+        newButton("continue", "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
@@ -374,7 +352,7 @@ newTrial("intro_history",
 // -------------------------------------------------------------------
 // Language Use
 newTrial("intro_use",
-    newText("use_text", "<b>Language Use:</b> In this section, we would like you to answer some questions about your language use by selecting the appropriate level. <b>Total use for all languages in a given question should equal 100%.</b>")
+    newText("use_text", "<b>语言使用状况:</b> 在这个部分中，我们想请您回答一些关于您本身语言使用比例的问题，请在相符的框框中勾选您的答案。每一题的整体语言使用比例的总和必须为100%")
         .print()
     ,
     newButton("Next").print().wait()
@@ -468,7 +446,7 @@ newTrial("intro_use",
         .print()
     ,
 // other languages
-        newText("langoth", "Other Languages")  // adds padding between lines
+        newText("langoth", "其他语言")  // adds padding between lines
             .css('font-size','1em')
             .print()
         ,
@@ -518,7 +496,7 @@ newTrial("intro_use",
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue")
+        newButton("continue", "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
@@ -531,24 +509,24 @@ newTrial("intro_use",
 
 
 // -------------------------------------------------------------------
-// Proficiency
-newTrial("intro_profic_attit",
-    newText("profic_attit_text", "<b>Language Proficiency and Attitudes:</b> In this section, we would like you to rate your language proficiency and attitudes by giving marks from 1 to 7.")
+// Proficiency 
+newTrial("intro_profic",
+    newText("profic_text", "<b>语言程度 </b> 在这个部分中，请您从1到7中自评您的语言程度。")
         .print()
     ,
     newButton("Next").print().wait()
 )
 
 Template(GetTable( "blp.csv")
-    .filter( row => row.category == "proficiency" || row.category == "attitudes")  // filter where row.category value equals 'history'
+    .filter( row => row.category == "proficiency")  // filter where row.category value equals 'proficiency'
     , row => 
-    newTrial("profic_attit",
+    newTrial("profic",
         newText("quest_prof", row.question)
 //              .settings.css("font-size", "60px")
             .settings.css("font-family", "avenir")
             .print()
         ,
-        newText("pad10", " ")  // adds padding between lines
+        newText("pad17", " ")  // adds padding between lines
             .css('font-size','1em')
             .print()
         ,
@@ -571,7 +549,7 @@ Template(GetTable( "blp.csv")
             .keys()
             .print()
         ,
-        newText("pad12", " ")  // adds padding between lines
+        newText("pad16", " ")  // adds padding between lines
             .css('font-size','2em')
             .print()
         ,
@@ -581,7 +559,7 @@ Template(GetTable( "blp.csv")
                 .settings.css("font-family", "avenir")
                 .print()
             ,
-        newText("pad13", " ")  // adds padding between lines
+        newText("pad19", " ")  // adds padding between lines
         .css('font-size','1em')
             .print()
         ,
@@ -612,11 +590,11 @@ Template(GetTable( "blp.csv")
         getScale("lang2-scale")
         .wait("first")
         ,    
-        newText("pad14", " ")  // adds padding between lines
+        newText("pad18", " ")  // adds padding between lines
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue")
+        newButton("continue", "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
@@ -627,6 +605,104 @@ Template(GetTable( "blp.csv")
         .log( "category", row.category)
         .log( "Subject", getVar("partID")) 
         )
+
+        // -------------------------------------------------------------------
+// Attitudes
+newTrial("intro_attit",
+newText("attit_text", "<b>语言态度 </b>在这个部分中， 阅读完关于语言态度的题目叙述之后，从1到7中，选出你对叙述的同意程度。")
+    .print()
+,
+newButton("Next").print().wait()
+)
+
+Template(GetTable( "blp.csv")
+.filter( row => row.category == "attitudes")  // filter where row.category value equals 'attitudes'
+, row => 
+newTrial("attit",
+    newText("quest_prof", row.question)
+//              .settings.css("font-size", "60px")
+        .settings.css("font-family", "avenir")
+        .print()
+    ,
+    newText("pad10", " ")  // adds padding between lines
+        .css('font-size','1em')
+        .print()
+    ,
+    defaultText
+        .css({display: 'flex', width: '700px', 'justify-content': 'space-between'})
+    ,
+    newText("span1", '<span>'+row.leftlabel+'</span><span>'+row.rightlabel+'</span>')
+        .color("blue")
+        .print()
+    ,
+    defaultScale
+        .css({width: "700px", 'max-width':'unset', 'margin-bottom':'0.5em'})
+        .cssContainer("margin-bottom", "0.2em")
+        .log()
+    ,         
+    newScale("lang1-scale",  parseInt(row.scalevalues))
+        .labelsPosition("top")
+        .label(0, row.firstlabel)
+        .label(row.lastnum, row.lastlabel)
+        .keys()
+        .print()
+    ,
+    newText("pad12", " ")  // adds padding between lines
+        .css('font-size','2em')
+        .print()
+    ,
+// language 2
+    newText("quest_prof2", row.question_L2)
+    //              .settings.css("font-size", "60px")
+            .settings.css("font-family", "avenir")
+            .print()
+        ,
+    newText("pad13", " ")  // adds padding between lines
+    .css('font-size','1em')
+        .print()
+    ,
+    defaultText
+        .css({display: 'flex', width: '700px', 'justify-content': 'space-between'})
+    ,   
+    // button labels
+    // "<span>left label</span><span>right label</span>"
+    newText("span2", '<span>'+row.leftlabel+'</span><span>'+row.rightlabel+'</span>')
+        .color("blue")
+        .print()
+    ,
+    defaultScale
+        .css({width: "700px", 'max-width':'unset', 'margin-bottom':'0.5em'})
+        .cssContainer("margin-bottom", "0.2em")
+        .log()
+    ,         
+    newScale("lang2-scale",  parseInt(row.scalevalues))
+        .labelsPosition("top")
+        .label(0, row.firstlabel)
+        .label(row.lastnum, row.lastlabel)
+        .keys()
+        .print()
+    ,
+    getScale("lang1-scale")
+    .wait("first")
+    ,
+    getScale("lang2-scale")
+    .wait("first")
+    ,    
+    newText("pad14", " ")  // adds padding between lines
+    .css('font-size','2em')
+    .print()
+    ,
+    newButton("continue", "继续")
+        .before(newCanvas("canv-continue",290,20))
+        .print()
+        .wait()
+    )
+    .log( "quest_prof", row.question)
+    .log("quest_prof2", row.question_L2)
+    .log("blp_item", row.blp_item)
+    .log( "category", row.category)
+    .log( "Subject", getVar("partID")) 
+    )
 
 
 // prolific page URL: https://app.prolific.co/submissions/complete?cc=1F43E610

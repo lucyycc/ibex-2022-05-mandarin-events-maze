@@ -21,8 +21,8 @@ jqueryWidget: {
         if (this.transfer == "click") {
             this.continueMessage = dget(this.options, "continueMessage", "点此继续");
             this.consentRequired = dget(this.options, "consentRequired", false);
-            this.consentMessage = dget(this.options, "consentMessage", "I have read the above and agree to do the experiment.");
-            this.consentErrorMessage = dget(this.options, "consentErrorMessage", "You must consent before continuing.");
+            this.consentMessage = dget(this.options, "consentMessage", "我已经阅读, 并同意继续实验。");
+            this.consentErrorMessage = dget(this.options, "consentErrorMessage", "您需要同意后方可继续实验。");
 
             // Add the consent checkbox if necessary.
             var checkbox = null;
