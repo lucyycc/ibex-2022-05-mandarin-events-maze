@@ -32,7 +32,7 @@ newTrial("IDentry",
     ,
     newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
     ,
-    newButton("点此继续").print().wait( 
+    newButton("clickcontinue", "点此继续").print().wait( 
         getVar("partID").set( v=>$("#partID").val() ).testNot.is('')
     )
 )
@@ -95,12 +95,14 @@ function modifyRunningOrder(ro) {
       // first number after item count is how many items between breaks. second is total-items - 1
         if (item_count%15===0 & item_count<84){
        // value here should be total_items - items_per_block (to trigger message that last block is coming up)
+       // text says "only 1 set of sentences left"
             if (item_count===75){
-                text="End of block. Only 1 block left!";
+                text="只剩下一组句子了";
                 }
             else {
       // first number is the total number of blocks. second number is number of items per block
-                text="End of block. "+(6-(Math.floor(item_count/15)))+" blocks left.";
+      // message says "end of block. n blocks left."
+                text="本组句子结束，还剩"+(6-(Math.floor(item_count/15)))+" 组句子";
             }ro[i].push(new DynamicElement("Message", 
                               { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
         }
