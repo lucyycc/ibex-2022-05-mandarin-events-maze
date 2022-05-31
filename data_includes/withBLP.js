@@ -16,8 +16,10 @@ var shuffleSequence = seq("consent", "IDentry", "intro",
                         "history", 
                         "use_text",
                         "use", 
-                        "profic_attit_text",
-                        "profic_attit", 
+                        "profic_text",
+                        "profic", 
+                        "attit_text",
+                        "attit", 
                         "closing",
  						"sendresults",
                         "completion"
@@ -225,7 +227,7 @@ var items = [
 
 // Subject info
 newTrial("blpintro",
-    newText("InstructionText", "We would like to ask you to help us by answering the following questions concerning your language history, use, attitudes, and proficiency. This survey was created with support from the Center for Open Educational Resources and Language Learning at the University of Texas at Austin to better understand the profiles of bilingual speakers in diverse settings with diverse backgrounds. The survey consists of 19 questions and will take less than 10 minutes to complete. This is not a test, so there are no right or wrong answers. Please answer every question and give your answers sincerely. Thank you very much for your help.")
+    newText("InstructionText", "我们想请您回答一些关于您语言使用的问题，以下的问题包含您的语言使用历史，使用状况，语言态度以及语言程度。此问卷是由德州大学奥斯丁分校的开放教育资源及语言学习中心所研发，目的在于帮助我们了解双语者在多元的环境跟背景之下的个人资料。此份问卷有19个问题，作答时间约为10分钟。此份问卷不是能力测验，所以并没有标准答案，请您根据您本身的状况据实回答即可，感谢您的回答。")
         .print()
     ,
     newButton("Next").print().wait()
@@ -261,7 +263,7 @@ newTrial("bio",
 // -------------------------------------------------------------------
 // Language History
 newTrial("intro_history",
-    newText("history_text", "<b>Language history:</b> In this section, we would like you to answer some factual questions about your language history by placing a check in the appropriate box.")
+    newText("history_text", "<b>语言使用历史:</b> 这个部份的问题，我们想请您回答一些关于您本身语言使用历史的问题，请在相符的框框中勾选您的答案")
         .print()
     ,
     newButton("Next").print().wait()
@@ -374,7 +376,7 @@ newTrial("intro_history",
 // -------------------------------------------------------------------
 // Language Use
 newTrial("intro_use",
-    newText("use_text", "<b>Language Use:</b> In this section, we would like you to answer some questions about your language use by selecting the appropriate level. <b>Total use for all languages in a given question should equal 100%.</b>")
+    newText("use_text", "<b>语言使用状况:</b> 在这个部分中，我们想请您回答一些关于您本身语言使用比例的问题，请在相符的框框中勾选您的答案。每一题的整体语言使用比例的总和必须为100%")
         .print()
     ,
     newButton("Next").print().wait()
@@ -518,7 +520,7 @@ newTrial("intro_use",
         .css('font-size','2em')
         .print()
         ,
-        newButton("continue", , "继续")
+        newButton("continue", "继续")
             .before(newCanvas("canv-continue",290,20))
             .print()
             .wait()
@@ -531,24 +533,24 @@ newTrial("intro_use",
 
 
 // -------------------------------------------------------------------
-// Proficiency
-newTrial("intro_profic_attit",
-    newText("profic_attit_text", "<b>Language Proficiency and Attitudes:</b> In this section, we would like you to rate your language proficiency and attitudes by giving marks from 1 to 7.")
+// Proficiency 
+newTrial("intro_profic",
+    newText("profic_text", "<b>语言程度 </b> 在这个部分中，请您从0到6中自评您的语言程度。")
         .print()
     ,
     newButton("Next").print().wait()
 )
 
 Template(GetTable( "blp.csv")
-    .filter( row => row.category == "proficiency" || row.category == "attitudes")  // filter where row.category value equals 'history'
+    .filter( row => row.category == "proficiency")  // filter where row.category value equals 'proficiency'
     , row => 
-    newTrial("profic_attit",
+    newTrial("profic",
         newText("quest_prof", row.question)
 //              .settings.css("font-size", "60px")
             .settings.css("font-family", "avenir")
             .print()
         ,
-        newText("pad10", " ")  // adds padding between lines
+        newText("pad17", " ")  // adds padding between lines
             .css('font-size','1em')
             .print()
         ,
@@ -571,7 +573,7 @@ Template(GetTable( "blp.csv")
             .keys()
             .print()
         ,
-        newText("pad12", " ")  // adds padding between lines
+        newText("pad16", " ")  // adds padding between lines
             .css('font-size','2em')
             .print()
         ,
@@ -581,7 +583,7 @@ Template(GetTable( "blp.csv")
                 .settings.css("font-family", "avenir")
                 .print()
             ,
-        newText("pad13", " ")  // adds padding between lines
+        newText("pad19", " ")  // adds padding between lines
         .css('font-size','1em')
             .print()
         ,
@@ -612,7 +614,7 @@ Template(GetTable( "blp.csv")
         getScale("lang2-scale")
         .wait("first")
         ,    
-        newText("pad14", " ")  // adds padding between lines
+        newText("pad18", " ")  // adds padding between lines
         .css('font-size','2em')
         .print()
         ,
@@ -627,6 +629,104 @@ Template(GetTable( "blp.csv")
         .log( "category", row.category)
         .log( "Subject", getVar("partID")) 
         )
+
+        // -------------------------------------------------------------------
+// Attitudes
+newTrial("intro_attit",
+newText("attit_text", "<b>语言态度 </b>在这个部分中， 阅读完关于语言态度的题目叙述之后，从0到6中，选出你对叙述的同意程度。")
+    .print()
+,
+newButton("Next").print().wait()
+)
+
+Template(GetTable( "blp.csv")
+.filter( row => row.category == "attitudes")  // filter where row.category value equals 'attitudes'
+, row => 
+newTrial("attit",
+    newText("quest_prof", row.question)
+//              .settings.css("font-size", "60px")
+        .settings.css("font-family", "avenir")
+        .print()
+    ,
+    newText("pad10", " ")  // adds padding between lines
+        .css('font-size','1em')
+        .print()
+    ,
+    defaultText
+        .css({display: 'flex', width: '700px', 'justify-content': 'space-between'})
+    ,
+    newText("span1", '<span>'+row.leftlabel+'</span><span>'+row.rightlabel+'</span>')
+        .color("blue")
+        .print()
+    ,
+    defaultScale
+        .css({width: "700px", 'max-width':'unset', 'margin-bottom':'0.5em'})
+        .cssContainer("margin-bottom", "0.2em")
+        .log()
+    ,         
+    newScale("lang1-scale",  parseInt(row.scalevalues))
+        .labelsPosition("top")
+        .label(0, row.firstlabel)
+        .label(row.lastnum, row.lastlabel)
+        .keys()
+        .print()
+    ,
+    newText("pad12", " ")  // adds padding between lines
+        .css('font-size','2em')
+        .print()
+    ,
+// language 2
+    newText("quest_prof2", row.question_L2)
+    //              .settings.css("font-size", "60px")
+            .settings.css("font-family", "avenir")
+            .print()
+        ,
+    newText("pad13", " ")  // adds padding between lines
+    .css('font-size','1em')
+        .print()
+    ,
+    defaultText
+        .css({display: 'flex', width: '700px', 'justify-content': 'space-between'})
+    ,   
+    // button labels
+    // "<span>left label</span><span>right label</span>"
+    newText("span2", '<span>'+row.leftlabel+'</span><span>'+row.rightlabel+'</span>')
+        .color("blue")
+        .print()
+    ,
+    defaultScale
+        .css({width: "700px", 'max-width':'unset', 'margin-bottom':'0.5em'})
+        .cssContainer("margin-bottom", "0.2em")
+        .log()
+    ,         
+    newScale("lang2-scale",  parseInt(row.scalevalues))
+        .labelsPosition("top")
+        .label(0, row.firstlabel)
+        .label(row.lastnum, row.lastlabel)
+        .keys()
+        .print()
+    ,
+    getScale("lang1-scale")
+    .wait("first")
+    ,
+    getScale("lang2-scale")
+    .wait("first")
+    ,    
+    newText("pad14", " ")  // adds padding between lines
+    .css('font-size','2em')
+    .print()
+    ,
+    newButton("continue", "继续")
+        .before(newCanvas("canv-continue",290,20))
+        .print()
+        .wait()
+    )
+    .log( "quest_prof", row.question)
+    .log("quest_prof2", row.question_L2)
+    .log("blp_item", row.blp_item)
+    .log( "category", row.category)
+    .log( "Subject", getVar("partID")) 
+    )
 
 
 // prolific page URL: https://app.prolific.co/submissions/complete?cc=1F43E610
