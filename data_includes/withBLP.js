@@ -8,7 +8,8 @@ var shuffleSequence = seq("consent", "IDentry", "intro", "tech",
                         "setcounter",
                         "starter",
  // trials named _dummy_ will be excluded by following:
-                        sepWith("sep", rshuffle(startsWith("break"), startsWith("hit"), startsWith("filler"))),
+            //            sepWith("sep", rshuffle(startsWith("break"), startsWith("hit"), startsWith("filler"))),
+                        followEachWith("sep",randomize(anyOf(startsWith("break"),startsWith("hit"), startsWith("filler")))),
  // bilingual language profile survey
                         "blpintro", 
                         "bio",
@@ -20,7 +21,7 @@ var shuffleSequence = seq("consent", "IDentry", "intro", "tech",
                         "profic", 
                         "intro_attit",
                         "attit", 
-                        "closing",
+ //                       "closing",
  						"sendresults",
                         "completion"
                 );
@@ -55,63 +56,49 @@ var defaults = [
    // "Maze", {redo: true}, //uncomment to try "redo" mode
 ];
 
-// The following example inserts a "pause" Message at every nth item (where i % n)
-// The % operator returns the remainder of two numbers, so will be 0 when a multiple of n
-
-//function modifyRunningOrder(ro) {
-// for (var i = 1; i < ro.length; ++i) {
-//     if (i % 50 == 0) {
-//              // Passing 'true' as the third argument casues the results from this controller
-//            // to be omitted from the results file. (Though in fact, the Message controller
-//          // does not add any results in any case.)
-//           ro[i].push(new DynamicElement(
-//                 "Message",
-//               //    { html: "<p>Pause</p>", transfer: 1000 },
-//                     { html: "<p>You can take a short break (1 minute or less) here if needed. Press any key to continue.</p>", transfer: "keypress" },
-//  						true
-//               ));
-//           }
-//        }
-//       return ro;
-//    }
-
-// following is from the A-maze site to make breaks every 15 maze sentences
+// following is from the A-maze site to make breaks every 15(ish) maze sentences
 // you have to set the write number of total items and number of blocks to start with, and the right condition names, etc.
 // calculate the following numbers to fill in the values below (not including practice trials-
-// total maze sentences a participant will be presented: 85
-// sentences per block: 15
-// number of blocks: 6 (last incomplete)
+// for Mandarin hit/break study:
+// total maze sentences a participant will be presented: 64 (25 experiment, 39 filler)
+// sentences per block: 16
+// number of blocks: 4
 
 function modifyRunningOrder(ro) {
 
-  var new_ro = [];
-  item_count=0;
-  for (var i in ro) {
-    var item = ro[i];
-    // fill in the relevant experimental condition names on the next line
-    if (item[0].type.startsWith("break")|| item[0].type.startsWith("hit") || item[0].type.startsWith("filler")) {
-        item_count++;
-        new_ro.push(item);
-      // first number after item count is how many items between breaks. second is total-items - 1
-        if (item_count%15===0 & item_count<84){
-       // value here should be total_items - items_per_block (to trigger message that last block is coming up)
-       // text says "only 1 set of sentences left"
-            if (item_count===75){
-                text="只剩下一组句子了";
+    var new_ro = [];
+    item_count=0;
+    for (var i in ro) {
+      var item = ro[i];
+      // fill in the relevant stimuli condition names on the next line including fillers (all that should be counted for break purposes)
+      if (item[0].type.startsWith("break")|| item[0].type.startsWith("hit") || item[0].type.startsWith("filler")) {
+          item_count++;
+          new_ro.push(item);
+        // number after percent (remainder) after item_count is how many items between breaks. last number is total-items - 1
+          if (item_count%16===0 & item_count<63){
+         // value for item_count=== should be total_items - items_per_block (to trigger message that last block is coming up)
+         // text says "only 1 set of sentences left"
+              if (item_count===48){
+                    ro[i].push(new DynamicElement("Message", 
+                        { html: "<p>只剩下一组句子了</p>", transfer: 3000 }));
+                } else {
+                // first number is the total number of blocks. second number is number of items per block
+                // message says "end of block. n blocks left."
+                    ro[i].push(new DynamicElement("Message", 
+                        { html: "<p>本组句子结束，还剩"+(4-(Math.floor(item_count/16)))+" 组句子</p>", transfer: 3000 }));
                 }
-            else {
-      // first number is the total number of blocks. second number is number of items per block
-      // message says "end of block. n blocks left."
-                text="本组句子结束，还剩"+(6-(Math.floor(item_count/15)))+" 组句子";
-            }ro[i].push(new DynamicElement("Message", 
-                              { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
+                // next message is added for all breaks after the count message
+                ro[i].push(new DynamicElement("Message", 
+                    { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
+          }
+        } else {
+    // if it's not an experimental trial, such as separator or other item, just show the item
+             new_ro.push(item);
         }
-      } else {
-      new_ro.push(item);
-      }
+    }
+    return new_ro;
   }
-  return new_ro;
-}
+  
 
 // template items will be pushed into native items = [] with fake PC trial _dummy_ output
 
@@ -145,13 +132,6 @@ var items = [
 
 ["consent", "Form", { html: { include: "consent.html" } } ],
 
-["demo", "Form", {
-	html: { include: "demo.html" },
-	validators: {
-		age: function (s) { if (s.match(/^\d+$/)) return true; else return "Bad value for \u2018age\u2019"; }
-	}
-} ],
-
 ["intro", "Form", { html: { include: "intro1.html" } } ],
 
 ["tech", "Form", { html: { include: "tech.html" } } ],
@@ -184,22 +164,12 @@ var items = [
 [["practice", 802], "Maze", {s:"爸爸 边看 电视 边讲 电话", a:"x-x-x 气孔 避免 腐朽 抓住"}],
 [["practice", 803], "Maze", {s:"运动员 在健身房 做了 重量 训练", a:"x-x-x 莎士比亚 螳螂 愤怒 爸爸"}],
 
-
-//		["instructions2", "Message", {html:'End of sample Maze experiment.'}],
-//	["intro-gram", "Message", {html: "<p>For this experiment, please place your left index finger on the 'e' key and your right index finger on the 'i' key.</p><p> You will read sentences word by word. On each screen you will see two options: one will be the next word in the sentence, and one will not. Select the word that continues the sentence by pressing 'e' (left-hand) for the word on the left or pressing 'i' (right-hand) for the word on the right.</p><p>Select the best word as quickly as you can, but without making too many errors.</p>"}],
-//	["intro-practice", "Message", {html: "The following items are for practice." }],
-//	["end-practice", "Message", {html: "End of practice. The experiment will begin next."}],
-//	["done", "Message", {html: "All done!"}],
-
    // message that the experiment is beginning
-
 
    ["starter", Message, {consentRequired: false,
 	html: ["div",
 		   ["p", "点此开始主实验"]
 		  ]}],
-
-
 
 // experimental stimuli:
 
@@ -226,7 +196,9 @@ var items = [
 // leave this bracket - it closes the items section
 ];
 
-//// 
+// -------------------------------------------------------------------
+
+//// BLP Section 
 /// Instructions:
 
 // Subject info
