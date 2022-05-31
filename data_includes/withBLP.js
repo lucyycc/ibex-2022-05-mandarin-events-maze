@@ -12,13 +12,13 @@ var shuffleSequence = seq("consent", "IDentry", "intro",
  // bilingual language profile survey
                         "blpintro", 
                         "bio",
-                        "history_text",
+                        "intro_history",
                         "history", 
-                        "use_text",
+                        "intro_use",
                         "use", 
-                        "profic_text",
+                        "intro_profic",
                         "profic", 
-                        "attit_text",
+                        "intro_attit",
                         "attit", 
                         "closing",
  						"sendresults",
@@ -470,7 +470,7 @@ newTrial("intro_use",
         .print()
     ,
 // other languages
-        newText("langoth", "Other Languages")  // adds padding between lines
+        newText("langoth", "其他語言")  // adds padding between lines
             .css('font-size','1em')
             .print()
         ,
@@ -535,7 +535,7 @@ newTrial("intro_use",
 // -------------------------------------------------------------------
 // Proficiency 
 newTrial("intro_profic",
-    newText("profic_text", "<b>语言程度 </b> 在这个部分中，请您从0到6中自评您的语言程度。")
+    newText("profic_text", "<b>语言程度 </b> 在这个部分中，请您从1到7中自评您的语言程度。")
         .print()
     ,
     newButton("Next").print().wait()
@@ -633,7 +633,7 @@ Template(GetTable( "blp.csv")
         // -------------------------------------------------------------------
 // Attitudes
 newTrial("intro_attit",
-newText("attit_text", "<b>语言态度 </b>在这个部分中， 阅读完关于语言态度的题目叙述之后，从0到6中，选出你对叙述的同意程度。")
+newText("attit_text", "<b>语言态度 </b>在这个部分中， 阅读完关于语言态度的题目叙述之后，从1到7中，选出你对叙述的同意程度。")
     .print()
 ,
 newButton("Next").print().wait()
