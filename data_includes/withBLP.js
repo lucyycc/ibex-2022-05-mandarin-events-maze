@@ -89,7 +89,7 @@ function modifyRunningOrder(ro) {
                 }
                 // next message is added for all breaks after the count message
                 ro[i].push(new DynamicElement("Message", 
-                    { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
+                    { html: "<p>您有30秒时间休息， 如果您需要的话，可以短暂的看向屏幕以外的地方或者拉伸身体来放松，30秒后实验会自动开始。</p>", transfer: 30000 }));
           }
         } else {
     // if it's not an experimental trial, such as separator or other item, just show the item
