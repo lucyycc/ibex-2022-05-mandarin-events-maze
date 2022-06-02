@@ -29,7 +29,7 @@ var shuffleSequence = seq("consent", "IDentry", "intro", "tech",
 newTrial("IDentry",
     newVar("partID").global()
     ,
-    newText("instr", "请输入10位数字代码，此匿名代码将作为您的资料代码:").print()
+    newText("instr", "请输入10位数字代码，此匿名代码将作为您的资料代码：").print()
     ,
     newHtml("partpage", "<input type='text' id='partID' name='participant ID' min='1' max='120'>").print()
     ,
@@ -80,7 +80,7 @@ function modifyRunningOrder(ro) {
          // text says "only 1 set of sentences left"
               if (item_count===48){
                     ro[i].push(new DynamicElement("Message", 
-                        { html: "<p>只剩下一组句子了</p>", transfer: 3000 }));
+                        { html: "<p>只剩下一组句子了！</p>", transfer: 3000 }));
                 } else {
                 // first number is the total number of blocks. second number is number of items per block
                 // message says "end of block. n blocks left."
@@ -89,7 +89,7 @@ function modifyRunningOrder(ro) {
                 }
                 // next message is added for all breaks after the count message
                 ro[i].push(new DynamicElement("Message", 
-                    { html: "<p>您有30秒时间休息, 如果您需要的话, 可以短暂的看向屏幕以外的地方或者拉伸身体来放松</p>", transfer: 30000 }));
+                    { html: "<p>您有30秒时间休息， 如果您需要的话，可以短暂的看向屏幕以外的地方或者拉伸身体来放松，30秒后实验会自动开始。</p>", transfer: 30000 }));
           }
         } else {
     // if it's not an experimental trial, such as separator or other item, just show the item
@@ -206,7 +206,7 @@ newTrial("blpintro",
     newText("InstructionText", "我们想请您回答一些关于您语言使用的问题，以下的问题包含您的语言使用历史，使用状况，语言态度以及语言程度。此问卷是由德州大学奥斯丁分校的开放教育资源及语言学习中心所研发，目的在于帮助我们了解双语者在多元的环境跟背景之下的个人资料。此份问卷有19个问题，作答时间约为10分钟。此份问卷不是能力测验，所以并没有标准答案，请您根据您本身的状况据实回答即可，感谢您的回答。")
         .print()
     ,
-    newButton("Next").print().wait()
+    newButton("continue", "继续").print().wait()
 )
 
 // -------------------------------------------------------------------
@@ -239,10 +239,10 @@ newTrial("bio",
 // -------------------------------------------------------------------
 // Language History
 newTrial("intro_history",
-    newText("history_text", "<b>语言使用历史:</b> 这个部份的问题，我们想请您回答一些关于您本身语言使用历史的问题，请在相符的框框中勾选您的答案")
+    newText("history_text", "<b>语言使用历史:</b> 这个部份的问题，我们想请您回答一些关于您本身语言使用历史的问题，请在相符的框框中勾选您的答案。")
         .print()
     ,
-    newButton("Next").print().wait()
+    newButton("continue", "继续").print().wait()
 )
     Template(GetTable( "blp.csv")
         .filter( row => row.category == "history")  // filter where row.category value equals 'history'
@@ -352,10 +352,10 @@ newTrial("intro_history",
 // -------------------------------------------------------------------
 // Language Use
 newTrial("intro_use",
-    newText("use_text", "<b>语言使用状况:</b> 在这个部分中，我们想请您回答一些关于您本身语言使用比例的问题，请在相符的框框中勾选您的答案。每一题的整体语言使用比例的总和必须为100%")
+    newText("use_text", "<b>语言使用状况:</b> 在这个部分中，我们想请您回答一些关于您本身语言使用比例的问题，请在相符的框框中勾选您的答案。每一题的整体语言使用比例的总和必须为100%。")
         .print()
     ,
-    newButton("Next").print().wait()
+    newButton("continue", "继续").print().wait()
 )
 
     Template(GetTable( "blp.csv")
@@ -514,7 +514,7 @@ newTrial("intro_profic",
     newText("profic_text", "<b>语言程度 </b> 在这个部分中，请您从1到7中自评您的语言程度。")
         .print()
     ,
-    newButton("Next").print().wait()
+    newButton("continue", "继续").print().wait()
 )
 
 Template(GetTable( "blp.csv")
@@ -612,7 +612,7 @@ newTrial("intro_attit",
 newText("attit_text", "<b>语言态度 </b>在这个部分中， 阅读完关于语言态度的题目叙述之后，从1到7中，选出你对叙述的同意程度。")
     .print()
 ,
-newButton("Next").print().wait()
+newButton("continue", "继续").print().wait()
 )
 
 Template(GetTable( "blp.csv")
